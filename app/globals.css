@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f9f9f7;
+  --foreground: #1a1a18;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1a1a18;
+    --foreground: #f0efe8;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Prevent horizontal overflow caused by long words or unbroken content */
+html, body {
+  overflow-x: hidden;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: #d1d5db;
+  cursor: pointer;
+  width: 100%;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #2563eb;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #2563eb;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.dark input[type="range"] {
+  background: #374151;
+}
