@@ -52,7 +52,19 @@ export function useSpeech(pages: string[], totalWords: number) {
     const load = () => {
       const all = window.speechSynthesis.getVoices();
       const en = all.filter((v) => v.lang.startsWith("en"));
-      setVoices(en.length > 0 ? en : all);
+      // load clones and append
+      let mapped: SpeechSynthesisVoice[] = [];
+      try {
+        const raw = localStorage.getItem('audiovox:clones');
+        if (raw) {
+          const clones = JSON.parse(raw) as { id: number; name: string }[];
+          mapped = clones.map((c) => ({ name: c.name, lang: 'en-US', voiceURI: `audiovox-clone-${c.id}` })) as unknown as SpeechSynthesisVoice[];
+        }
+      } catch {
+        mapped = [];
+      }
+      const base = en.length > 0 ? en : all;
+      setVoices([...base, ...mapped]);
     };
     load();
     window.speechSynthesis.onvoiceschanged = load;
