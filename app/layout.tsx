@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AppShell } from "./components/AppShell";
 
 export const metadata: Metadata = {
   title: "Audiovox",
@@ -19,7 +20,9 @@ export default function RootLayout({
     // Adding suppressHydrationWarning avoids noisy console warnings in dev.
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-[#f9f9f7] dark:bg-[#1a1a18] text-[#1a1a18] dark:text-[#f0efe8]">
-        {children}
+        <AppShell>
+          {children}
+        </AppShell>
       </body>
     </html>
   );

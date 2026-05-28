@@ -5,6 +5,7 @@ import {
   ChevronLeft, ChevronRight, Mic, Gauge, Music2,
 } from "lucide-react";
 import { useSpeech } from "../hooks/useSpeech";
+import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 import { TextPreview } from "./TextPreview";
 import { PdfData } from "../hooks/usePdfExtractor";
 
@@ -32,6 +33,14 @@ export function Player({ pdfData, onReset }: Props) {
     isPlaying, currentPage, voices, settings, highlightRange,
     progress, togglePlay, skip, seekTo, goToPage, updateSettings, stop,
   } = useSpeech(pages, totalWords);
+
+  useKeyboardShortcuts({
+    onToggle: togglePlay,
+    onSkipBack: () => skip(-10),
+    onSkipForward: () => skip(10),
+    onPrevPage: () => goToPage(-1),
+    onNextPage: () => goToPage(1),
+  });
 
   const wpm = 150 * settings.speed;
   const wordsDone = pages.slice(0, currentPage).reduce((a, p) => a + p.split(/\s+/).length, 0);

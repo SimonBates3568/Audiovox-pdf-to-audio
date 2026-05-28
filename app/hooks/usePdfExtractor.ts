@@ -11,22 +11,23 @@ export function usePdfExtractor() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pdfData, setPdfData] = useState<PdfData | null>(null);
+  const [lastFile, setLastFile] = useState<File | null>(null);
 
   const extractPdf = useCallback(async (file: File) => {
     setLoading(true);
     setError(null);
     setPdfData(null);
+    setLastFile(file);
 
     try {
-      let pdfjsLib: any;
+      let pdfjsLib: unknown;
       try {
         // Prefer the legacy build which is more self-contained and avoids
         // dynamic ESM worker imports in some bundler/dev setups.
-        // @ts-ignore
-        pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+  pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
       } catch {
         // fallback to the package entry
-        pdfjsLib = await import("pdfjs-dist");
+  pdfjsLib = await import("pdfjs-dist");
       }
       // We intentionally avoid setting pdfjsLib.GlobalWorkerOptions.workerSrc
       // because in development pdf.js may try to dynamically import the
@@ -38,6 +39,7 @@ export function usePdfExtractor() {
       // Place the correct worker there (see README/commands below) so the
       // library can create a dedicated worker thread for parsing.
       try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (pdfjsLib as any).GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
       } catch {
         // ignore
@@ -45,6 +47,7 @@ export function usePdfExtractor() {
   // Force pdfjs to run without a worker in environments where loading the
   // worker fails (dev servers, protocol mismatches). This parses on the
   // main thread; it's acceptable for small PDFs used in this demo.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const pdf = await (pdfjsLib as any).getDocument({ data: arrayBuffer }).promise;
       const pages: string[] = [];
 
@@ -103,11 +106,69 @@ export function usePdfExtractor() {
     }
   }, []);
 
+  const ocrExtract = useCallback(async (file?: File) => {
+    const target = file || lastFile;
+    if (!target) {
+      setError("No file available for OCR.");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+  const Tesseract = (await import("tesseract.js")).default;
+      const arrayBuffer = await target.arrayBuffer();
+      // create blob url so tesseract can read pages as images (pdf->image conversion is not trivial
+      // client-side; instead use pdf.js to render each page to canvas and OCR that)
+      let pdfjsLib: unknown;
+      try {
+  pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+      } catch {
+  pdfjsLib = await import("pdfjs-dist");
+      }
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (pdfjsLib as any).GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+      } catch {}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const pdf = await (pdfjsLib as any).getDocument({ data: arrayBuffer }).promise;
+      const pages: string[] = [];
+      for (let i = 1; i <= pdf.numPages; i++) {
+        try {
+          const page = await pdf.getPage(i);
+          const viewport = page.getViewport({ scale: 1.5 });
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.ceil(viewport.width);
+          canvas.height = Math.ceil(viewport.height);
+          const ctx = canvas.getContext('2d');
+          if (!ctx) continue;
+          await page.render({ canvasContext: ctx, viewport }).promise;
+          const dataUrl = canvas.toDataURL('image/png');
+          const res = await Tesseract.recognize(dataUrl, 'eng');
+          const text = (res?.data?.text || '').replace(/\s+/g, ' ').trim();
+          if (text.length > 10) pages.push(text);
+        } catch (e) {
+          console.error('OCR failed for page', i, e);
+        }
+      }
+      if (pages.length === 0) {
+        setError('OCR did not find readable text.');
+        return;
+      }
+      const totalWords = pages.reduce((acc, p) => acc + p.split(/\s+/).length, 0);
+      setPdfData({ pages, fileName: target.name, totalWords });
+    } catch (err) {
+      console.error('OCR extraction failed:', err);
+      setError('OCR failed. See console for details.');
+    } finally {
+      setLoading(false);
+    }
+  }, [lastFile]);
+
   const reset = useCallback(() => {
     setPdfData(null);
     setError(null);
     setLoading(false);
   }, []);
 
-  return { loading, error, pdfData, extractPdf, reset };
+  return { loading, error, pdfData, extractPdf, reset, lastFile, ocrExtract };
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-label="Audiovox logo">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="50%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#60a5fa" />
+    </linearGradient>
+    <linearGradient id="g2" x1="0" x2="1">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#fff" stop-opacity="0.6" />
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="b" />
+      <feBlend in="SourceGraphic" in2="b" mode="normal"/>
+    </filter>
+  </defs>
+
+  <!-- background rounded rectangle subtle -->
+  <rect x="0" y="0" width="1200" height="360" rx="28" fill="url(#g1)" opacity="0.04"/>
+
+  <!-- left icon: stylized headphones + waveform -->
+  <g transform="translate(80,60)">
+    <!-- ear cups -->
+    <g transform="translate(0,20)">
+      <ellipse cx="120" cy="140" rx="78" ry="92" fill="#0f172a" opacity="0.06" />
+      <path d="M56 44 C56 20 84 0 120 0 C156 0 184 20 184 44 L184 164 C184 190 156 212 120 212 C84 212 56 190 56 164 Z"
+            fill="url(#g1)" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+      <circle cx="120" cy="104" r="36" fill="#0b1220" opacity="0.12"/>
+    </g>
+
+    <!-- arch/headband -->
+    <path d="M24 24 C64 -20 176 -20 216 24" stroke="url(#g1)" stroke-width="22" stroke-linecap="round" fill="none" opacity="0.95" />
+
+    <!-- waveform in center (sound) -->
+    <g transform="translate(72,56)">
+      <rect x="0" y="0" width="176" height="120" rx="16" fill="rgba(255,255,255,0.02)" />
+      <path d="M8 64 C24 32 40 100 56 64 C72 28 88 100 104 64 C120 28 136 92 152 64 C168 36 184 64 200 64"
+            fill="none" stroke="url(#g2)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.95" transform="scale(0.8,0.8) translate(-2,8)"/>
+      <!-- echo rings -->
+      <circle cx="96" cy="60" r="34" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="2" />
+    </g>
+  </g>
+
+  <!-- brand wordmark -->
+  <g transform="translate(320,170)">
+    <text x="0" y="12" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
+          font-weight="700" font-size="84" fill="url(#g1)" letter-spacing="-2">Audiovox</text>
+    <text x="0" y="70" font-family="Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
+          font-weight="500" font-size="20" fill="#94a3b8">PDF → Audio · Listen to documents</text>
+  </g>
+
+  <!-- subtle shine across wordmark -->
+  <g transform="translate(320,120)" filter="url(#soft)">
+    <rect x="0" y="0" width="560" height="110" rx="6" fill="url(#g2)" opacity="0.06" />
+  </g>
+</svg>
