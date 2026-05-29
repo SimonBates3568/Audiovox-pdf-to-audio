@@ -1,0 +1,10 @@
+/* Minimal styles for the Ebook page */
+.ebook-preview {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  line-height: 1.6;
+}
+
+.ebook-preview::-webkit-scrollbar { width: 8px; height: 8px; }
+.ebook-preview::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.08); border-radius: 6px; }
+
+.ebook-toolbar button { min-width: 84px; }

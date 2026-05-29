@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
+import { isValidApiKey } from '../../../lib/apiAuth';
 
 // Simple WAV generator: returns silence for a duration derived from text length.
 export async function POST(request: Request) {
+  if (!isValidApiKey(request)) {
+    return NextResponse.json({ error: 'invalid or missing API key' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const text: string = (body?.text) || '';
