@@ -15,24 +15,7 @@ export default function Home() {
             <p className="text-sm text-gray-500 mt-1">Upload a document and convert its text into speech</p>
           </div>
 
-          {/* Steps */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
-              <div className="text-xs text-yellow-700 font-semibold">Step 1</div>
-              <h3 className="font-medium mt-2">Upload File</h3>
-              <p className="text-sm text-gray-500 mt-1">Upload your document and we will extract the text for conversion</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
-              <div className="text-xs text-blue-700 font-semibold">Step 2</div>
-              <h3 className="font-medium mt-2">Extract Text</h3>
-              <p className="text-sm text-gray-500 mt-1">Our system will process your file and extract all the text content</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800">
-              <div className="text-xs text-green-700 font-semibold">Step 3</div>
-              <h3 className="font-medium mt-2">Convert to Speech</h3>
-              <p className="text-sm text-gray-500 mt-1">Convert the extracted text into natural-sounding speech</p>
-            </div>
-          </div>
+          {/* Steps removed — moved to Text page */}
 
           {/* Large dropzone area */}
           <div className="rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-700 p-12 text-center bg-white dark:bg-gray-900">
