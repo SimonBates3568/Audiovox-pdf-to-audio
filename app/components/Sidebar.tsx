@@ -6,10 +6,14 @@ import { X, FileText, Megaphone, User, LayoutList, Radio, BookOpen, Clock, Setti
 
 export function Sidebar({ isOpen = true, onClose }: { isOpen?: boolean; onClose?: () => void }) {
   const pathname = usePathname() || "/";
-  const active = (p: string) => pathname.startsWith(p);
+  const active = (p: string) => {
+    // Root path should be an exact match — other paths can use startsWith
+    if (p === '/') return pathname === '/';
+    return pathname.startsWith(p);
+  };
 
   return (
-    <aside className={`fixed inset-y-0 left-0 z-40 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform md:static md:shadow-none w-64 min-h-screen bg-white dark:bg-[#0f0f0e] border-r border-gray-100 dark:border-gray-800 px-4 py-6 flex flex-col justify-between`}> 
+  <aside className={`fixed inset-y-0 left-0 z-40 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform md:static md:shadow-none w-64 md:w-72 lg:w-64 min-h-screen bg-white dark:bg-[#0f0f0e] border-r border-gray-100 dark:border-gray-800 px-3 sm:px-4 py-6 flex flex-col justify-between`}> 
       <div>
         <div className="flex items-center gap-3 mb-8">
           <div className="w-10 h-10 relative">
@@ -21,7 +25,7 @@ export function Sidebar({ isOpen = true, onClose }: { isOpen?: boolean; onClose?
           </button>
         </div>
 
-        <nav className="space-y-1 text-sm text-gray-600 dark:text-gray-300">
+  <nav className="space-y-1 text-sm text-gray-600 dark:text-gray-300">
           <Link href="/text" className={`flex items-center gap-3 px-3 py-2 rounded-lg ${active('/text') ? 'bg-gray-100 dark:bg-gray-900' : 'hover:bg-gray-50 dark:hover:bg-gray-900'}`}>
             <Megaphone size={18} />
             <span>Text to Speech</span>
@@ -49,7 +53,7 @@ export function Sidebar({ isOpen = true, onClose }: { isOpen?: boolean; onClose?
           </Link>
         </nav>
 
-        <div className="mt-6 text-xs text-gray-500 dark:text-gray-400">
+  <div className="mt-6 text-xs text-gray-500 dark:text-gray-400">
           <p className="font-semibold text-gray-700 dark:text-gray-200">Options</p>
           <div className="mt-2 space-y-1">
             <a className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900" href="#">
@@ -65,8 +69,8 @@ export function Sidebar({ isOpen = true, onClose }: { isOpen?: boolean; onClose?
         </div>
       </div>
 
-        <div className="mt-6">
-        <div className="rounded-2xl p-4 bg-gradient-to-r from-rose-50 to-white dark:from-rose-950/10 dark:to-transparent border border-gray-100 dark:border-gray-800 mb-4">
+  <div className="mt-6">
+  <div className="rounded-2xl p-3 sm:p-4 bg-gradient-to-r from-rose-50 to-white dark:from-rose-950/10 dark:to-transparent border border-gray-100 dark:border-gray-800 mb-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold">Pro Subscription</p>
@@ -76,7 +80,7 @@ export function Sidebar({ isOpen = true, onClose }: { isOpen?: boolean; onClose?
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-900 px-3 py-2 rounded-lg">
+  <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-900 px-3 py-3 rounded-lg">
           <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white">S</div>
           <div>
             <div className="text-sm font-medium">Simon Bates</div>
